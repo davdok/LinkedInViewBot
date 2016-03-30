@@ -7,48 +7,53 @@ from bs4 import BeautifulSoup
 
 
 def getEmail():
+    '''Simple function to get email input '''
     email_verrified = False
     while not email_verrified:
-        email = raw_input('Linkedin Email: ')
+        email = raw_input('Linkedin Email: ') #Asking for user input
+
+        #Checking email format
         if re.match(r"[^@]+@[^@]+\.[^@]+", email):
             email_verrified = True
             return email
         else:
             print "Email not valid. Please try again"
 
-            
 def getPassword():
+    '''Simple function to get pasword input'''
     pw_verrified = False
     while not pw_verrified:
-        password = getpass.getpass('Password:')
+
+        password = getpass.getpass('Password:') #Asking for user input
+
+        #Checking password format
         if len(password) >= 6:
             pw_verrified = True
             return password
         else:
             print "Password must have 6 or more characters"
 
-
 def getPeopleLinks(page):
+    '''Append a list with all user links in the page'''
     links = []
-    for link in page.find_all('a'):
+    for link in page.find_all('a'): #look for all <a ....> </a
+        #Getting the href attribute
         url = link.get('href')
-        if url:
-            if 'profile/view?id' in url:
+        if url: #making sure there is an href with the boolean
+            if 'profile/view?id' in url: #locating the link to other profile
                 links.append(url)
-
     return links
-
 
 def getJobLinks(page):
     links = []
-    for link in page.find_all('a'):
+    for link in page.find_all('a'):#look for all <a ....> </a
+        #Getting the href attribute
         url = link.get('href')
-        if url:
+        if url: #making sure there is an href with the boolean
             if '/jobs' in url:
                 links.append(url)
-
+                print "jobs is in url:",url 
     return links
-
 
 def getID(url):
     pURL = urlparse.urlparse(url)
@@ -70,12 +75,22 @@ def ViewBot(browser):
             if ID not in visited:
                 pList.append(person)
                 visited[ID] = 1
-
+        
         if pList:
             person = pList.pop()
             browser.get(person)
+            
+            #Trying to access job
+            '''
+            jobi=[]
+            for job in page.find_all('a'):
+                url2=job.get('href')
+                if url2: #making sure there is an href with the boolean
+                    if 'company/' in url2: #locating the link to other profile
+                        jobi.append(url2)
+            '''
             counter += 1
-
+        
         else:
             jobs = getJobLinks(page)
             if jobs:
@@ -86,13 +101,12 @@ def ViewBot(browser):
                 if root not in job or roots not in job:
                     job = "https://www.linkedin.com" + job
                 browser.get(job)
-
             else:
                 print("I'm lost in this sea of jobs!!!")
                 print("I'm giving up....")
                 break
-
-        print("[+] " + browser.title + " Visited!\n(" + str(counter)+"/" + str(len(pList)) + ") Visited/Queue")
+        
+        print("[+] " + browser.title + jobi[0] + " Visited!\n(" + str(counter)+"/" + str(len(pList)) + ") Visited/Queue")
         print person
         print ""
 
@@ -113,6 +127,11 @@ def Main():
     os.system('clear')
     print("[+] Success! You are now logged in with %s." % email)
     print("[+] The bot is starting!")
+    '''
+    time.sleep(random.uniform(3.4, 9.5))
+    #Indicate the search you want to initiate crawling
+    browser.get("https://www.linkedin.com/vsearch/p?keywords=developeur")
+    '''
     ViewBot(browser)
     browser.close()
 
