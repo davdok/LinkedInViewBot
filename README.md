@@ -1,7 +1,7 @@
 # LinkedInViewBot
 
 This is a small LinkedIn crawler based on Selenium and BeautifulSoup4.
-It's goal is to collect LinkedIn profil links on each page it visits.
+It's goal is to collect LinkedIn profil links on each page it visits. // It will also create a spreadsheet with collected links, with relevant jobs and email if indicated
 
 To get started, make sure you have [pip](https://pip.pypa.io/en/stable/installing/ "Get pip") and [Firefox](https://www.mozilla.org/en-US/firefox/new/ "Get Firefox") installed on your machine:
 
